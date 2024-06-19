@@ -52,6 +52,13 @@ class MainWindow(QMainWindow):
 
         self.add_new_tab()
 
+    def add_new_tab(self):
+        qurl = QUrl('https://www.google.com')
+        browser = QWebEngineView()
+        browser.setUrl(qurl)
+        i = self.tabs.addTab(browser, "New Tab")
+        self.tabs.setCurrentIndex(i)
+
     def navigate(self):
         qurl = QUrl(self.urlbar.text())
         if qurl.scheme() == "":
