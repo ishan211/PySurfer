@@ -1,0 +1,72 @@
+import sys
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtWebEngineWidgets import *
+
+class Browser(QWebEngineView):
+    def contextMenuEvent(self, event):
+        self.menus = QMenu()
+        self.menus.setStyleSheet("border-image:url(img/webbg2.png); QMenu::item::hover { text-color: rgb(30,30,30); }")
+        action1 = QAction("View source code", self)
+        self.menus.addAction(action1)
+        self.menus.popup(event.globalPos())
+
+class MainWindow(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+
+        self.tabs = QTabWidget()
+        self.tabs.setTabsClosable(True)
+        self.setCentralWidget(self.tabs)
+
+        self.navbar = QToolBar("Navigation")
+        self.addToolBar(self.navbar)
+
+        self.back_btn = QAction("Back", self)
+        self.back_btn.triggered.connect(lamda: self.tabs.currentWidget().back())
+        self.navbar.addAction(self.back_btn)
+
+        self.reload_btn = QAction("Reload", self)
+        self.reload_btn.triggered.connect(lamda: self.tabs.currentWidget().reload())
+        self.avbar.addAction(self.reload_btn)
+
+        self.home_btn = QAction("Home", self)
+        self.home_btn.triggered.connect(lamda: self.tabs.currentWidget().setUrl(QUrl('https://www.google.com')))
+        self.navbar.addAction(self.home_btn)
+
+        self.new_tab_btn = QAction("New Tab", self)
+        self.new_tab_btn.triggered.connect(self.add_new_tab)
+        self.navbar.addAction(self.new_tab_btn)
+
+        self.urlbar = QLineEdit()
+        self.urlbar.returnPressed.connect(self.navigate)
+        self.navbar.addWidget(self.urlbar)
+
+        self.searchbar = QLineEdit()
+        self.searchbar.returnPressed.connect(self.search)
+        self.navbar.addWidget(self.searchbar)
+
+        self.add_new_tab()
+
+    def add_new_tab(self):
+        qurl = QUrl('https://www.google.com')
+        browser = QWebEngineView()
+        browser.setUrl(qurl)
+        i = self.tabs.addTab(browser, "New Tab")
+        self.tabs.setCurrentIndex(i)
+
+    def close_tab(self):
+        self.tab.removeTab()
+
+    def navigate(self):
+        qurl = QUrl(self.urlbar.text())
+        if qurl.scheme() == "":
+            qurl.setScheme("http")
+        self.tabs.currentWidget().setUrl(qurl)
+
+app = QApplication(sys.argv)
+app.setApplicationName("Tabbed Browser")
+window = MainWindow()
+window.show()
+app.exec_()
