@@ -5,9 +5,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtWebEngineWidgets import *
 
 class Browser(QWebEngineView):
-    def contexMenuEvent(self, event):
+    def contextMenuEvent(self, event):
         self.menus = QMenu()
-        self.menus.setStyleSheet("border-image:url(img/webbg2.png); QMenu::item::hover { tex-color: rgb(30,30,30); }")
+        self.menus.setStyleSheet("border-image:url(img/webbg2.png); QMenu::item::hover { text-color: rgb(30,30,30); }")
         action1 = QAction("View source code", self)
         self.menus.addAction(action1)
         self.menus.popup(event.globalPos())
@@ -66,17 +66,20 @@ class MainWindow(QMainWindow):
         self.tabs.removeTab(i)
 
     def navigate(self):
-        qurl = QUrl(self.urlbar.tex())
+        qurl = QUrl(self.urlbar.text())
         if qurl.scheme() == "":
             qurl.setScheme("http")
         self.tabs.currentWidget().setUrl(qurl)
-        self.urlbar.settex(qurl.toString())
+        self.urlbar.setText(qurl.toString())
 
     def search(self):
-        search_term = self.searchbar.tex()
+        search_term = self.searchbar.text()
         url = f"https://www.google.com/search?q={search_term}"
         self.tabs.currentWidget().setUrl(QUrl(url))
-        self.urlbar.settex(url)
+        self.urlbar.setText(url)
+
+    def update_urlbar(self, q):
+        self.urlbar.setText(q.toString())
 
 app = QApplication(sys.argv)
 app.setApplicationName("Tabbed Browser")
