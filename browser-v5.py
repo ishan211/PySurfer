@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         self.navbar.addAction(self.reload_btn)
 
         self.home_btn = QAction("Home", self)
-        self.home_btn.triggered.connect(lambda: self.tabs.currentWidget().setUrl(QUrl('https://www.google.com')))
+        self.home_btn.triggered.connect(lambda: self.tabs.currentWidget().setUrl(QUrl('https://ishanleung.netlify.app')))
         self.navbar.addAction(self.home_btn)
 
         self.new_tab_btn = QAction("New Tab", self)
